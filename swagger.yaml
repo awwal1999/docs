@@ -1,0 +1,322 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/)."
+  version: "1.0.0"
+  title: "Frij API"
+  # termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "jobs4awwal@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "frijapp.herokuapp.com"
+basePath: "/api"
+tags:
+# - name: "frij"
+  # description: "Everything about your Pets"
+  # externalDocs:
+    # description: "Find out more"
+    # url: "http://swagger.io"
+schemes:
+- "https"
+# - "http"
+paths:
+  /register:
+    post:
+      tags:
+      - "Frij"
+      summary: "Register a new user with a unique device key"
+      description: ""
+      operationId: "register"
+      consumes:
+      - "application/json"
+      # - "application/xml"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "success"
+        422:
+          description: "Unprocessible Entity"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /login:
+    post:
+      tags:
+      - "Frij"
+      summary: "User login"
+      description: ""
+      operationId: "login"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "formData"
+        description: "The email for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "formData"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation and returns a token"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "Invalid status value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /device:
+    get:
+      tags:
+      - "Frij"
+      summary: "return the user's device"
+      description: ""
+      operationId: "device"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          
+        400:
+          description: "Invalid tag value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    patch:
+      tags:
+      - "Frij"
+      summary: "Update the device name"
+      description: ""
+      operationId: "deviceUpdate"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "formData"
+        description: "name of device"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          
+        400:
+          description: "Invalid tag value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    
+  /switch:
+    post:
+      tags:
+      - "Frij"
+      summary: "change the device status"
+      description: "switch device on or off"
+      operationId: "switchDevice"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      - name: "status"
+        in: "formData"
+        description: "on or off"
+        required: true
+        type: "string"
+        enum:
+        - "on"
+        - "off"
+      responses:
+        200:
+          description: "successful operation"
+          
+        422:
+          description: "Uprocessable entity"
+  /range:
+    post:
+      tags:
+      - "Frij"
+      summary: "Set the device temprature range"
+      description: "Set the device min and max temprature values"
+      operationId: "setRange"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      - name: "min"
+        in: "formData"
+        description: "min temprature"
+        required: true
+        type: "string"
+      - name: "max"
+        in: "formData"
+        description: "max temprature"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          
+        422:
+          description: "Uprocessable entity"
+  /plans:
+    get:
+      tags:
+      - "Frij"
+      summary: "Get all available subscription plans"
+      description: ""
+      operationId: "plans"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          
+        401:
+          description: "Unauthorized"
+  /intersets:
+    get:
+      tags:
+      - "Frij"
+      summary: "Get all available intersts"
+      description: ""
+      operationId: "getInterest"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          
+        401:
+          description: "Unauthorized"
+    post:
+      tags:
+      - "Frij"
+      summary: "post user's selected intrests"
+      description: ""
+      operationId: "postInterest"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      # - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "Authenticated user token"
+        required: true
+        type: "string"
+      - name: "interest"
+        in: "body"
+        schema:
+         type: "object"
+      responses:
+        200:
+          description: "successful operation"
+          
+        401:
+          description: "Unauthorized"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      deviceKey:
+        type: "string"
+      password:
+        type: "string"
+      c_password:
+        type: "string"
+    xml:
+      name: "User"
+  Interest:
+    type: "object"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
